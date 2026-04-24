@@ -1,0 +1,68 @@
+rules_version = '2';
+// ============================================================
+// FIRESTORE SECURITY RULES — AuthSystem v2
+// Firebase Console → Firestore Database → Rules → Publish
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper: Je, mtumiaji wa sasa ni admin? ────────────────
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuth()
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // ── Users Collection ──────────────────────────────────────
+    match /users/{userId} {
+
+      // Soma: mtumiaji yeyote aliyeingia (inahitajika kwa users table)
+      allow read: if isAuth();
+
+      // Unda: akaunti yako mwenyewe tu (kuzuia kuunda akaunti za wengine)
+      allow create: if isOwner(userId)
+                    && request.resource.data.role == 'user';
+
+      // Badilisha:
+      //   - Mtumiaji mwenyewe: anaweza kubadilisha wasifu wake
+      //     LAKINI HAWEZI kubadilisha 'role' (kuzuia kujipa admin)
+      //   - Admin: anaweza kubadilisha kila kitu (role, isActive, n.k.)
+      allow update: if isAuth() && (
+        ( isOwner(userId)
+          && !('role' in request.resource.data.diff(resource.data).affectedKeys()) )
+        || isAdmin()
+      );
+
+      // Futa: admin peke yake (mtumiaji hawezi kujifuta mwenyewe)
+      allow delete: if isAdmin();
+    }
+
+    // ── Activity Collection ───────────────────────────────────
+    match /activity/{activityId} {
+
+      // Soma: mtumiaji yeyote aliyeingia (kwa charts na activity feed)
+      allow read: if isAuth();
+
+      // Unda: unaweza kuandika activity yako mwenyewe tu
+      // (kuzuia kuandika activity kwa jina la mtu mwingine)
+      allow create: if isAuth()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll(['userId','type','description','timestamp']);
+
+      // Futa: activity yako mwenyewe AU admin (kwa clearByUser)
+      allow delete: if isAuth()
+                    && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Badilisha: hairuhusiwi kabisa (logs hazibadiliki)
+      allow update: if false;
+    }
+  }
+}

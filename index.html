@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="sw" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ingia — AuthSystem</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body class="auth-body">
+
+  <!-- ── Toast Container ─────────────────────────────────── -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ── Background Blobs ────────────────────────────────── -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ── Theme Toggle ────────────────────────────────────── -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Badilisha mandhari">
+    <i data-lucide="moon" id="moonIcon" class="toggle-icon"></i>
+    <i data-lucide="sun"  id="sunIcon"  class="toggle-icon hidden"></i>
+  </button>
+
+  <!-- ── Main Auth Container ─────────────────────────────── -->
+  <main class="auth-container">
+
+    <!-- Left Panel — Branding -->
+    <div class="auth-panel auth-panel-left">
+      <div class="brand-content">
+
+        <!-- Logo -->
+        <div class="brand-logo animate-fadeInDown">
+          <div class="logo-icon">
+            <i data-lucide="shield" class="logo-svg"></i>
+          </div>
+          <span class="logo-text">AuthSystem</span>
+        </div>
+
+        <!-- Headline -->
+        <div class="brand-headline animate-fadeInUp delay-200">
+          <h1>Simamia Mfumo Wako kwa Usalama Kamili</h1>
+          <p>Platform inayoaminika na timu za developers na makampuni zaidi ya 1,200 duniani kote.</p>
+        </div>
+
+        <!-- Features -->
+        <div class="brand-features animate-fadeInUp delay-300">
+          <div class="feature-item">
+            <span class="feature-icon"><i data-lucide="shield-check"></i></span>
+            <span>Usalama wa daraja la enterprise</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i data-lucide="zap"></i></span>
+            <span>Utendaji wa kasi — uptime 99.9%</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon"><i data-lucide="layers"></i></span>
+            <span>Inaunganika na mifumo yote maarufu</span>
+          </div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="brand-testimonial animate-fadeInUp delay-400">
+          <div class="testimonial-quote">
+            &ldquo;AuthSystem imebadilisha jinsi timu yetu inavyofanya kazi. Usalama na urahisi wa kutumia viko sambamba kabisa.&rdquo;
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">JM</div>
+            <div class="author-info">
+              <div class="author-name">James Mwangi</div>
+              <div class="author-role">Lead Developer &mdash; TechSolutions Ltd</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges animate-fadeInUp delay-500">
+          <div class="trust-badge">
+            <i data-lucide="lock"></i>
+            <span>SSL Encrypted</span>
+          </div>
+          <div class="trust-badge">
+            <i data-lucide="shield"></i>
+            <span>GDPR Ready</span>
+          </div>
+          <div class="trust-badge">
+            <i data-lucide="check-circle"></i>
+            <span>ISO 27001</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Panel — Login Form -->
+    <div class="auth-panel auth-panel-right">
+      <div class="auth-form-wrapper animate-scaleIn">
+
+        <div class="auth-form-header">
+          <h2>Ingia kwenye Akaunti</h2>
+          <p>Weka taarifa zako ili uendelee</p>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-login social-login-single">
+          <button type="button" class="btn-social btn-google" id="googleBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Endelea na Google
+          </button>
+        </div>
+
+        <div class="auth-divider social-divider">
+          <span>au ingia na barua pepe</span>
+        </div>
+
+        <form class="auth-form" id="loginForm" novalidate>
+
+          <!-- Email Field -->
+          <div class="form-group" id="emailGroup">
+            <label class="form-label" for="loginEmail">
+              <i data-lucide="mail"></i>
+              Barua pepe
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                class="form-input"
+                placeholder="wewe@kampuni.com"
+                autofocus
+                autocomplete="email"
+                required
+              />
+              <span class="input-status" id="emailStatus"></span>
+            </div>
+            <span class="form-error" id="emailError"></span>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group" id="passwordGroup">
+            <label class="form-label" for="loginPassword">
+              <i data-lucide="lock"></i>
+              Nywila
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                class="form-input"
+                placeholder="Nywila yako"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Onyesha/Ficha nywila">
+                <svg class="eye-icon" id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="form-error" id="passwordError"></span>
+          </div>
+
+          <!-- Remember Me + Forgot Password -->
+          <div class="form-options">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" id="rememberMe" name="remember" />
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-label">Nikumbuke</span>
+            </label>
+            <a href="#" class="forgot-link" id="forgotLink">Umesahau nywila?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit" id="loginBtn">
+            <span class="btn-text">Ingia</span>
+            <span class="btn-spinner" hidden>
+              <span class="spinner"></span>
+            </span>
+            <svg class="btn-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="trust-signal">
+            <i data-lucide="lock"></i>
+            <span>Muunganisho salama &mdash; SSL 256-bit</span>
+          </div>
+
+        </form>
+
+        <!-- Footer Link -->
+        <div class="auth-form-footer">
+          <p>Huna akaunti? <a href="register.html" class="auth-link">Jiandikishe hapa</a></p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Forgot Password Modal ───────────────────────────── -->
+  <div class="modal-overlay" id="forgotModal" hidden>
+    <div class="modal animate-scaleIn">
+      <div class="modal-header">
+        <h3>Rudisha Nywila</h3>
+        <button class="modal-close" id="modalClose" aria-label="Funga">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Ingiza barua pepe yako. Tutakuambia jinsi ya kuifanya kwa mfano wa demo hii.</p>
+        <div class="form-group" style="margin-top: 1rem;">
+          <div class="input-wrapper">
+            <input type="email" id="forgotEmail" class="form-input" placeholder="barua@pepe.com" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-submit" id="forgotSubmit" style="margin-top:0;">
+          <span class="btn-text">Tuma Ombi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="sw" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jiandikishe — AuthSystem</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body class="auth-body">
+
+  <!-- ── Toast Container ─────────────────────────────────── -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ── Background Blobs ────────────────────────────────── -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ── Theme Toggle ────────────────────────────────────── -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Badilisha mandhari">
+    <i data-lucide="moon" id="moonIcon" class="toggle-icon"></i>
+    <i data-lucide="sun"  id="sunIcon"  class="toggle-icon hidden"></i>
+  </button>
+
+  <!-- ── Main Auth Container ─────────────────────────────── -->
+  <main class="auth-container auth-container-register">
+
+    <!-- Left Panel — Branding (Register version) -->
+    <div class="auth-panel auth-panel-left auth-panel-left-reg">
+      <div class="brand-content">
+
+        <div class="brand-logo animate-fadeInDown">
+          <div class="logo-icon">
+            <i data-lucide="shield" class="logo-svg"></i>
+          </div>
+          <span class="logo-text">AuthSystem</span>
+        </div>
+
+        <div class="brand-headline animate-fadeInUp delay-200">
+          <h1>Anza Bila Malipo. Kaa Salama Daima.</h1>
+          <p>Jiunge na developers na makampuni zaidi ya 1,200 wanaotumia AuthSystem kila siku.</p>
+        </div>
+
+        <!-- Steps Indicator -->
+        <div class="reg-steps animate-fadeInUp delay-300">
+          <div class="reg-step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-info">
+              <span class="step-title">Taarifa Zako</span>
+              <span class="step-desc">Jina na barua pepe</span>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="reg-step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-info">
+              <span class="step-title">Nywila Salama</span>
+              <span class="step-desc">Kulinda akaunti yako</span>
+            </div>
+          </div>
+          <div class="step-connector"></div>
+          <div class="reg-step" data-step="3">
+            <div class="step-circle">✓</div>
+            <div class="step-info">
+              <span class="step-title">Umefanikiwa!</span>
+              <span class="step-desc">Karibu mfumoni</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Benefits List -->
+        <div class="reg-benefits animate-fadeInUp delay-400">
+          <div class="benefit-item">
+            <div class="benefit-icon"><i data-lucide="credit-card"></i></div>
+            <div>
+              <div class="benefit-title">Hakuna Kadi ya Benki</div>
+              <div class="benefit-desc">Jiandikishe bure — hakuna malipo yoyote</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon"><i data-lucide="shield-check"></i></div>
+            <div>
+              <div class="benefit-title">Usalama wa Enterprise</div>
+              <div class="benefit-desc">Encryption ya AES-256 na 2FA built-in</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon"><i data-lucide="plug"></i></div>
+            <div>
+              <div class="benefit-title">API na Integrations</div>
+              <div class="benefit-desc">Unganika na mifumo yako iliyopo tayari</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges animate-fadeInUp delay-500">
+          <div class="trust-badge">
+            <i data-lucide="lock"></i>
+            <span>SSL Encrypted</span>
+          </div>
+          <div class="trust-badge">
+            <i data-lucide="shield"></i>
+            <span>GDPR Ready</span>
+          </div>
+          <div class="trust-badge">
+            <i data-lucide="check-circle"></i>
+            <span>ISO 27001</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Panel — Register Form -->
+    <div class="auth-panel auth-panel-right auth-panel-right-reg">
+      <div class="auth-form-wrapper animate-scaleIn">
+
+        <!-- Form Header -->
+        <div class="auth-form-header">
+          <h2>Unda Akaunti Mpya</h2>
+          <p>Jaza taarifa zako sahihi ili uendelee</p>
+        </div>
+
+        <!-- Social Login -->
+        <div class="social-login social-login-single">
+          <button type="button" class="btn-social btn-google" id="googleBtnReg">
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Endelea na Google
+          </button>
+        </div>
+
+        <div class="auth-divider social-divider">
+          <span>au jiandikishe na barua pepe</span>
+        </div>
+
+        <form class="auth-form" id="registerForm" novalidate>
+
+          <!-- Full Name -->
+          <div class="form-group" id="nameGroup">
+            <label class="form-label" for="regName">
+              <i data-lucide="user"></i>
+              Jina Kamili
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="regName"
+                name="fullName"
+                class="form-input"
+                placeholder="Jina na Ukoo"
+                autofocus
+                autocomplete="name"
+                required
+              />
+              <span class="input-status" id="nameStatus"></span>
+            </div>
+            <span class="form-error" id="nameError"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group" id="emailGroup">
+            <label class="form-label" for="regEmail">
+              <i data-lucide="mail"></i>
+              Barua Pepe
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="email"
+                id="regEmail"
+                name="email"
+                class="form-input"
+                placeholder="wewe@kampuni.com"
+                autocomplete="email"
+                required
+              />
+              <span class="input-status" id="emailStatus"></span>
+            </div>
+            <span class="form-error" id="emailError"></span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" id="passwordGroup">
+            <label class="form-label" for="regPassword">
+              <i data-lucide="lock"></i>
+              Nywila
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="regPassword"
+                name="password"
+                class="form-input"
+                placeholder="Nywila yako"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="passToggle1" aria-label="Onyesha/Ficha">
+                <svg id="eyeIcon1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <!-- Password Strength Meter -->
+            <div class="strength-bar-container" id="strengthContainer">
+              <div class="strength-bars">
+                <div class="strength-bar" id="sbar1"></div>
+                <div class="strength-bar" id="sbar2"></div>
+                <div class="strength-bar" id="sbar3"></div>
+                <div class="strength-bar" id="sbar4"></div>
+              </div>
+              <span class="strength-label" id="strengthLabel">Dhaifu</span>
+            </div>
+            <span class="form-error" id="passwordError"></span>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group" id="confirmGroup">
+            <label class="form-label" for="regConfirm">
+              <i data-lucide="shield-check"></i>
+              Thibitisha Nywila
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="regConfirm"
+                name="confirmPassword"
+                class="form-input"
+                placeholder="Thibitisha nywila"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="password-toggle" id="passToggle2" aria-label="Onyesha/Ficha">
+                <svg id="eyeIcon2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="form-error" id="confirmError"></span>
+          </div>
+
+          <!-- Password Requirements -->
+          <div class="pass-requirements" id="passRequirements">
+            <div class="req-item" id="req-length">
+              <i data-lucide="circle" class="req-icon"></i>
+              <span>Angalau herufi 8</span>
+            </div>
+            <div class="req-item" id="req-upper">
+              <i data-lucide="circle" class="req-icon"></i>
+              <span>Herufi kubwa moja (A-Z)</span>
+            </div>
+            <div class="req-item" id="req-number">
+              <i data-lucide="circle" class="req-icon"></i>
+              <span>Nambari moja (0-9)</span>
+            </div>
+            <div class="req-item" id="req-special">
+              <i data-lucide="circle" class="req-icon"></i>
+              <span>Alama maalum (!@#$...)</span>
+            </div>
+          </div>
+
+          <!-- Terms Checkbox -->
+          <div class="form-group">
+            <label class="checkbox-wrapper" id="termsGroup">
+              <input type="checkbox" id="agreeTerms" name="terms" required />
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-label">
+                Nakubali <a href="#" class="auth-link">Masharti</a> na <a href="#" class="auth-link">Sera ya Faragha</a>
+              </span>
+            </label>
+            <span class="form-error" id="termsError"></span>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit" id="registerBtn">
+            <span class="btn-text">Unda Akaunti</span>
+            <span class="btn-spinner" hidden>
+              <span class="spinner"></span>
+            </span>
+            <svg class="btn-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="trust-signal">
+            <i data-lucide="lock"></i>
+            <span>Muunganisho salama &mdash; SSL 256-bit</span>
+          </div>
+
+        </form>
+
+        <!-- Footer Link -->
+        <div class="auth-form-footer">
+          <p>Una akaunti tayari? <a href="index.html" class="auth-link">Ingia hapa</a></p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── Success Overlay ─────────────────────────────────── -->
+  <div class="success-overlay" id="successOverlay" hidden>
+    <div class="success-card animate-scaleIn">
+      <div class="success-icon-wrap">
+        <div class="success-ring"></div>
+        <div class="success-icon">
+          <i data-lucide="check" id="successCheck"></i>
+        </div>
+      </div>
+      <h2>Akaunti Imeundwa!</h2>
+      <p>Karibu mfumoni. Unakupelekwa dashibodini...</p>
+      <div class="success-progress">
+        <div class="success-bar" id="successBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

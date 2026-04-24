@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="sw" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashibodi — AuthSystem</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>/* dashboard.css handles all styles */</style>
+</head>
+<body>
+
+  <!-- Toast Container -->
+  <div class="dash-toast-wrap" id="dashToastWrap"></div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="dash-layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">
+          <i data-lucide="shield"></i>
+        </div>
+        AuthSystem
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-label" data-i18n="nav_main">KUU</span>
+        <button class="nav-item active" data-page="overview">
+          <i data-lucide="layout-dashboard"></i>
+          <span data-i18n="nav_overview">Muhtasari</span>
+        </button>
+        <button class="nav-item" data-page="users">
+          <i data-lucide="users"></i>
+          <span data-i18n="nav_users">Watumiaji</span>
+        </button>
+        <button class="nav-item" data-page="profile">
+          <i data-lucide="user"></i>
+          <span data-i18n="nav_profile">Wasifu Wangu</span>
+        </button>
+
+        <span class="nav-section-label" data-i18n="nav_account">AKAUNTI</span>
+        <button class="nav-item" data-page="security">
+          <i data-lucide="shield"></i>
+          <span data-i18n="nav_security">Usalama</span>
+        </button>
+        <button class="nav-item" data-page="settings">
+          <i data-lucide="settings"></i>
+          <span data-i18n="nav_settings">Mipangilio</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-logout-side" id="logoutBtn">
+          <i data-lucide="log-out"></i>
+          <span data-i18n="nav_logout">Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Dash Wrapper ── -->
+    <div class="dash-wrapper">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i data-lucide="menu"></i>
+          </button>
+          <span class="page-title" id="pageTitle">Muhtasari</span>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Language Toggle + Dropdown -->
+          <div class="lang-wrap" id="langWrap">
+            <button class="lang-btn" id="langBtn" data-lang="en" title="Change language">
+              <span class="lang-flag">🇬🇧</span>
+              <span class="lang-lbl">EN</span>
+              <span class="lang-caret">▾</span>
+            </button>
+            <div class="lang-menu" id="langMenu" hidden>
+              <button class="lang-option" data-lang="en">
+                <span class="lang-opt-flag">🇬🇧</span>
+                <span class="lang-opt-name">English</span>
+              </button>
+              <button class="lang-option" data-lang="sw">
+                <span class="lang-opt-flag">🇹🇿</span>
+                <span class="lang-opt-name">Kiswahili</span>
+              </button>
+              <button class="lang-option" data-lang="ar">
+                <span class="lang-opt-flag">🇸🇦</span>
+                <span class="lang-opt-name">العربية</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notification Bell -->
+          <div class="notif-wrap" id="notifWrap">
+            <button class="notif-btn" id="notifBtn" aria-label="Arifa">
+              <i data-lucide="bell"></i>
+              <span class="notif-badge" id="notifBadge" hidden>0</span>
+            </button>
+            <div class="notif-dropdown" id="notifDropdown" hidden>
+              <div class="notif-header">
+                <span data-i18n="notif_title">Notifications</span>
+                <button class="notif-clear" id="notifClear" data-i18n="notif_clear">Clear All</button>
+              </div>
+              <div class="notif-list" id="notifList">
+                <div class="notif-empty"><i data-lucide="bell-off"></i><p data-i18n="notif_empty">No notifications today.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button class="theme-btn" id="themeToggle" aria-label="Badilisha mandhari">
+            <i data-lucide="moon" id="moonIcon"></i>
+            <i data-lucide="sun"  id="sunIcon" class="hidden"></i>
+          </button>
+
+          <!-- User Dropdown -->
+          <div class="user-menu" id="userMenu">
+            <button class="user-btn" id="userMenuBtn">
+              <div class="user-avatar" id="userAvatarWrap">
+                <img id="userAvatarImg" class="avatar-photo" alt="" />
+                <span id="userInitials" translate="no">...</span>
+              </div>
+              <span id="userName" translate="no">—</span>
+              <span class="user-chevron"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="user-dropdown" id="userDropdown" hidden>
+              <div class="dropdown-header">
+                <div class="user-avatar-lg" id="dropAvatarWrap">
+                <img id="dropAvatarImg" class="avatar-photo" alt="" />
+                <span id="dropInitials" translate="no">...</span>
+              </div>
+                <div>
+                  <div class="dropdown-name" id="dropName" translate="no">—</div>
+                  <div class="dropdown-email" id="dropEmail" translate="no">—</div>
+                </div>
+              </div>
+              <button class="dropdown-item" data-page="profile">
+                <i data-lucide="user"></i> <span data-i18n="nav_profile">My Profile</span>
+              </button>
+              <button class="dropdown-item" data-page="settings">
+                <i data-lucide="settings"></i> <span data-i18n="nav_settings">Settings</span>
+              </button>
+              <hr class="dropdown-divider" />
+              <button class="dropdown-item danger" id="logoutDropBtn">
+                <i data-lucide="log-out"></i> <span data-i18n="nav_logout">Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── Main Content ── -->
+      <main class="dash-main">
+
+        <!-- ══ PAGE: Overview ══════════════════════════════════ -->
+        <section class="page active" id="page-overview">
+
+          <div class="welcome-bar">
+            <div>
+              <h1 id="welcomeText" translate="no">Habari...</h1>
+              <p class="welcome-date" id="welcomeDate">Leo ni —</p>
+            </div>
+            <div class="welcome-badge">
+              <i data-lucide="check-circle"></i>
+              <span data-i18n="welcome_badge">Logged in today</span>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon indigo"><i data-lucide="users"></i></div>
+              <div class="stat-body">
+                <div class="stat-value" id="statTotal">—</div>
+                <div class="stat-label" data-i18n="stat_total">Watumiaji Wote</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="user-check"></i></div>
+              <div class="stat-body">
+                <div class="stat-value" id="statActive">—</div>
+                <div class="stat-label" data-i18n="stat_active">Wanaotumia</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon amber"><i data-lucide="log-in"></i></div>
+              <div class="stat-body">
+                <div class="stat-value" id="statLogins">—</div>
+                <div class="stat-label" data-i18n="stat_logins">Wageni wa Leo</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="user-plus"></i></div>
+              <div class="stat-body">
+                <div class="stat-value" id="statNew">—</div>
+                <div class="stat-label" data-i18n="stat_new">Wapya Wiki Hii</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Chart -->
+          <div class="dash-card chart-card">
+            <div class="dash-card-header">
+              <span class="dash-card-title" data-i18n="chart_title">Shughuli za Wiki</span>
+              <span class="chart-range" data-i18n="chart_range">Siku 7 zilizopita</span>
+            </div>
+            <div class="chart-body">
+              <div class="chart-canvas-wrap">
+                <canvas id="weeklyChartCanvas"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Grid -->
+          <div class="bottom-grid">
+
+            <!-- Profile Card -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title" data-i18n="profile_title">Taarifa Zangu</span>
+              </div>
+              <div class="profile-top">
+                <div class="profile-avatar-lg" id="profileAvatarWrap">
+                <img id="profileAvatarImg" class="avatar-photo" alt="" />
+                <span id="profileInitials" translate="no">...</span>
+              </div>
+                <div>
+                  <div class="profile-name" id="profileName" translate="no">—</div>
+                  <div class="profile-role-badge">
+                    <i data-lucide="check-circle"></i>
+                    <span id="profileRole">Mtumiaji</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field-row">
+                <span class="field-label" data-i18n="profile_email">Barua Pepe</span>
+                <span class="field-value" id="profileEmail">—</span>
+              </div>
+              <div class="field-row">
+                <span class="field-label" data-i18n="profile_joined">Mwanachama Tangu</span>
+                <span class="field-value" id="profileJoined">—</span>
+              </div>
+              <div class="field-row">
+                <span class="field-label" data-i18n="profile_logins">Idadi ya Kuingia</span>
+                <span class="field-value" id="profileLogins">—</span>
+              </div>
+              <div class="field-row">
+                <span class="field-label" data-i18n="profile_last_login">Mara ya Mwisho</span>
+                <span class="field-value" id="profileLastLogin">—</span>
+              </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title" data-i18n="activity_title">Shughuli za Hivi Karibuni</span>
+              </div>
+              <div class="activity-list" id="activityList">
+                <div class="activity-empty" data-i18n="activity_empty">Hakuna shughuli bado.</div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ══ PAGE: Users ════════════════════════════════════ -->
+        <section class="page" id="page-users">
+          <div class="page-header">
+            <h2 data-i18n="users_title">Watumiaji</h2>
+            <p data-i18n="users_subtitle">Orodha ya watumiaji wote waliojisajili kwenye mfumo</p>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="users-toolbar">
+            <div class="search-box">
+              <i data-lucide="search"></i>
+              <input type="text" id="userSearch" class="search-input" placeholder="Search by name or email..." data-i18n-ph="users_search_ph" autocomplete="off" />
+            </div>
+            <div class="users-total" id="usersCount" data-i18n="users_total">Inapakia...</div>
+          </div>
+
+          <!-- Table Card -->
+          <div class="dash-card users-card">
+            <div class="users-table-wrap" id="usersTableWrap">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="users_table_user">Mtumiaji</th>
+                    <th data-i18n="users_table_email">Barua Pepe</th>
+                    <th data-i18n="users_table_role">Jukumu</th>
+                    <th data-i18n="users_table_status">Hali</th>
+                    <th data-i18n="users_table_joined">Alijiunga</th>
+                    <th data-i18n="users_table_last_login">Mara ya Mwisho</th>
+                    <th data-i18n="users_table_actions">Vitendo</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+              </table>
+            </div>
+            <div class="users-empty" id="usersEmpty" hidden>
+              <div class="users-empty-icon"><i data-lucide="search-x"></i></div>
+              <p data-i18n="users_empty">Hakuna watumiaji wanaolingana na utafutaji wako.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ PAGE: Profile ══════════════════════════════════ -->
+        <section class="page" id="page-profile">
+          <div class="page-header">
+            <h2 data-i18n="profile_title">Wasifu Wangu</h2>
+            <p data-i18n="profile_subtitle">Sasisha taarifa zako za kibinafsi</p>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">
+              <i data-lucide="user"></i>
+              <span data-i18n="profile_basic_info">Taarifa za Msingi</span>
+            </div>
+
+            <!-- Avatar Preview + Upload Row -->
+            <div class="avatar-edit-row">
+              <div class="avatar-edit-wrap" id="avatarEditWrap">
+                <img id="editAvatarImg" class="avatar-photo" alt="" />
+                <span id="editAvatarInitials">...</span>
+              </div>
+              <div class="avatar-edit-info">
+                <div class="dash-label" data-i18n="profile_avatar">Picha ya Wasifu</div>
+                <input type="url" class="dash-input" id="editAvatarUrl" placeholder="Paste your photo URL (https://...)" data-i18n-ph="ph_avatar_url" />
+                <div class="avatar-hint" data-i18n="profile_avatar_hint">Bandika URL ya picha yako kutoka Google, LinkedIn, au tovuti nyingine</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="dash-field">
+                <label class="dash-label" data-i18n="profile_name">Jina Kamili</label>
+                <input type="text" class="dash-input" id="editName" placeholder="Your full name" data-i18n-ph="ph_name" />
+              </div>
+              <div class="dash-field">
+                <label class="dash-label" data-i18n="profile_email">Barua Pepe</label>
+                <input type="email" class="dash-input" id="editEmail" disabled placeholder="email@example.com" data-i18n-ph="ph_email" />
+              </div>
+            </div>
+            <div class="dash-field">
+              <label class="dash-label" data-i18n="profile_role">Jukumu (Role)</label>
+              <input type="text" class="dash-input" id="editRole" disabled />
+            </div>
+            <div id="profileMsg"></div>
+            <div class="form-actions">
+              <button class="btn-primary" id="saveProfileBtn">
+                <i data-lucide="save"></i>
+                <span data-i18n="profile_save">Hifadhi Mabadiliko</span>
+              </button>
+              <button class="btn-ghost" id="cancelProfileBtn" data-i18n="profile_cancel">Ghairi</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ PAGE: Security ══════════════════════════════════ -->
+        <section class="page" id="page-security">
+          <div class="page-header">
+            <h2 data-i18n="security_title">Usalama wa Akaunti</h2>
+            <p data-i18n="security_subtitle">Badilisha nywila yako ili kulinda akaunti</p>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">
+              <i data-lucide="lock"></i>
+              <span data-i18n="security_change_password">Badilisha Nywila</span>
+            </div>
+            <div class="dash-field">
+              <label class="dash-label" data-i18n="security_current_password">Nywila ya Sasa</label>
+              <div class="pass-wrap">
+                <input type="password" class="dash-input" id="currentPass" placeholder="Enter current password" data-i18n-ph="ph_cur_pass" />
+                <button type="button" class="pass-eye" id="eyeSec1" aria-label="Onyesha">
+                  <i data-lucide="eye" id="eyeSec1Icon"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="dash-field">
+                <label class="dash-label" data-i18n="security_new_password">Nywila Mpya</label>
+                <div class="pass-wrap">
+                  <input type="password" class="dash-input" id="newPass" placeholder="At least 8 characters" data-i18n-ph="ph_new_pass" />
+                  <button type="button" class="pass-eye" id="eyeSec2" aria-label="Onyesha">
+                    <i data-lucide="eye" id="eyeSec2Icon"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="dash-field">
+                <label class="dash-label" data-i18n="security_confirm_password">Thibitisha Nywila Mpya</label>
+                <div class="pass-wrap">
+                  <input type="password" class="dash-input" id="confirmPass" placeholder="Repeat new password" data-i18n-ph="ph_confirm_pass" />
+                  <button type="button" class="pass-eye" id="eyeSec3" aria-label="Onyesha">
+                    <i data-lucide="eye" id="eyeSec3Icon"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="securityMsg"></div>
+            <div class="form-actions">
+              <button class="btn-primary" id="savePassBtn">
+                <i data-lucide="shield-check"></i>
+                <span data-i18n="security_save_password">Badilisha Nywila</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Session Info Card -->
+          <div class="form-section">
+            <div class="form-section-title">
+              <i data-lucide="monitor"></i>
+              <span data-i18n="security_session_info">Kipindi cha Sasa</span>
+            </div>
+            <div class="session-card" id="sessionCard">
+              <div class="session-row">
+                <span class="session-label" data-i18n="security_session_status">Hali</span>
+                <span class="badge badge-active"><span class="badge-dot"></span><span data-i18n="sess_status_active">Active</span></span>
+              </div>
+              <div class="session-row">
+                <span class="session-label" data-i18n="security_session_created">Umeingia</span>
+                <span class="session-val" id="sesCreated">—</span>
+              </div>
+              <div class="session-row">
+                <span class="session-label" data-i18n="security_session_expires">Inaisha</span>
+                <span class="session-val" id="sesExpires">—</span>
+              </div>
+              <div class="session-row">
+                <span class="session-label" data-i18n="security_session_remember">Kumbuka Mimi</span>
+                <span class="session-val" id="sesRemember">—</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ PAGE: Settings ══════════════════════════════════ -->
+        <section class="page" id="page-settings">
+          <div class="page-header">
+            <h2 data-i18n="settings_title">Mipangilio</h2>
+            <p data-i18n="settings_subtitle">Dhibiti mapendeleo ya mfumo wako</p>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">
+              <i data-lucide="sun"></i>
+              <span data-i18n="settings_appearance">Muonekano</span>
+            </div>
+            <div class="settings-list">
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4 data-i18n="settings_dark_mode">Hali ya Giza (Dark Mode)</h4>
+                  <p data-i18n="settings_dark_mode_description">Badilisha kati ya mwanga na giza</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="darkModeToggle" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4 data-i18n="settings_notifications">Arifa za Mfumo</h4>
+                  <p data-i18n="settings_notifications_description">Pokea arifa kuhusu shughuli za akaunti</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notifToggle" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">
+              <i data-lucide="info"></i>
+              <span data-i18n="settings_about">Kuhusu Mfumo</span>
+            </div>
+            <div class="settings-list">
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4 data-i18n="settings_version">Toleo</h4>
+                  <p data-i18n="settings_version_description">AuthSystem v1.0.0</p>
+                </div>
+                <span class="badge badge-active"><span class="badge-dot"></span> Stable</span>
+              </div>
+              <div class="setting-row">
+                <div class="setting-info">
+                  <h4 data-i18n="settings_storage">Hifadhi ya Data</h4>
+                  <p data-i18n="settings_storage_description">Firebase Firestore</p>
+                </div>
+                <span style="font-size:0.72rem;color:var(--text-muted);font-weight:600;" data-i18n="settings_storage_status">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="form-section danger-section">
+            <div class="form-section-title danger-title">
+              <i data-lucide="alert-triangle"></i>
+              <span data-i18n="settings_danger_zone">Eneo la Hatari</span>
+            </div>
+            <div class="danger-row">
+              <div class="danger-info">
+                <h4 data-i18n="settings_clear_activity">Futa Data ya Shughuli</h4>
+                <p data-i18n="settings_clear_activity_description">Futa historia yote ya kuingia na matendo. Hii haiwezi kurejeshwa.</p>
+              </div>
+              <button class="btn-danger-outline" id="clearActivityBtn">
+                <i data-lucide="trash-2"></i>
+                <span data-i18n="settings_clear_activity_button">Futa Historia</span>
+              </button>
+            </div>
+            <div class="danger-row">
+              <div class="danger-info">
+                <h4 data-i18n="settings_force_logout">Toka Kwa Mara Moja</h4>
+                <p data-i18n="settings_force_logout_description">Funga kikao cha sasa na utoke haraka bila uthibitisho.</p>
+              </div>
+              <button class="btn-danger" id="forceLogoutBtn">
+                <i data-lucide="log-out"></i>
+                <span data-i18n="settings_force_logout_button">Toka Sasa</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div><!-- end dash-wrapper -->
+  </div><!-- end dash-layout -->
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/firebase-db.js"></script>
+  <!-- Other libs -->
+  <script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.19.0/js/md5.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
