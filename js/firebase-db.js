@@ -94,6 +94,23 @@ const FB = {
         const freshSnap = await FDB.collection('users').doc(uid).get();
         return { success: true, user: { ...freshSnap.data(), id: uid } };
       } catch (err) {
+        /* Detect Google-only account trying email/password login */
+        if (err.code === 'auth/invalid-credential' ||
+            err.code === 'auth/wrong-password'     ||
+            err.code === 'auth/user-not-found') {
+          try {
+            const methods = await FAUTH.fetchSignInMethodsForEmail(
+              err.email || arguments[0]
+            );
+            if (methods.includes('google.com') && !methods.includes('password')) {
+              return {
+                success:       false,
+                googleAccount: true,
+                message:       'Akaunti hii iliundwa kwa Google. Tumia kitufe cha Google kuingia, au bonyeza "Forgot Password" kuweka nywila mpya.',
+              };
+            }
+          } catch (_) { /* ignore secondary check errors */ }
+        }
         return { success: false, message: FB._authError(err.code) };
       }
     },

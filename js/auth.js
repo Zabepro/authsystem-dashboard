@@ -455,9 +455,23 @@ function initLoginPage() {
     setButtonLoading(loginBtn, false);
 
     if (!result.success) {
-      Toast.error('Imeshindwa Kuingia', result.message);
-      Field.setError('emailGroup',    'emailError',    'Angalia barua pepe au nywila');
-      Field.setError('passwordGroup', 'passwordError', result.message);
+      if (result.googleAccount) {
+        /* Google-only account — guide user */
+        Field.setError('emailGroup', 'emailError', 'Akaunti hii inatumia Google Sign-In');
+        Field.clear('passwordGroup', 'passwordError');
+        Toast.warning('Akaunti ya Google', result.message);
+        /* Highlight Google button */
+        const gBtn = document.getElementById('googleBtn');
+        if (gBtn) {
+          gBtn.style.transition = 'box-shadow 0.3s';
+          gBtn.style.boxShadow  = '0 0 0 3px rgba(66,133,244,0.5)';
+          setTimeout(() => { gBtn.style.boxShadow = ''; }, 3000);
+        }
+      } else {
+        Toast.error('Imeshindwa Kuingia', result.message);
+        Field.setError('emailGroup',    'emailError',    'Angalia barua pepe au nywila');
+        Field.setError('passwordGroup', 'passwordError', result.message);
+      }
       return;
     }
 
