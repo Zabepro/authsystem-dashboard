@@ -1131,8 +1131,15 @@
 }
 
 /* ─── Responsive ────────────────────────────────────────── */
+
+/* ─ Tablet (≤1024px) ─────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .auth-body { height: auto; overflow-x: hidden; }
+  .auth-body {
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
   .auth-container {
     grid-template-columns: 1fr;
     height: auto;
@@ -1147,12 +1154,15 @@
   }
 }
 
+/* ─ Mobile (≤768px) ──────────────────────────────────────── */
 @media (max-width: 768px) {
   .auth-panel-right {
-    padding: var(--space-5) var(--space-5);
+    padding: var(--space-5) var(--space-4);
+    align-items: flex-start;
   }
   .auth-form-wrapper {
     max-width: 100%;
+    width: 100%;
   }
   .auth-form-header h2 {
     font-size: var(--text-xl);
@@ -1160,15 +1170,8 @@
   .theme-toggle {
     top: var(--space-3);
     right: var(--space-3);
-    width: 32px;
-    height: 32px;
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-panel-right {
-    padding: 4.5rem var(--space-4) var(--space-5);
-    align-items: flex-start;
+    width: 30px;
+    height: 30px;
   }
   .auth-form {
     gap: var(--space-2);
@@ -1176,6 +1179,117 @@
   .auth-form-header {
     margin-bottom: var(--space-3);
   }
+}
+
+/* ─ Small phones (≤480px) ────────────────────────────────── */
+@media (max-width: 480px) {
+  .auth-body {
+    overflow-y: auto;
+  }
+
+  .auth-panel-right {
+    padding: 3.2rem var(--space-3) var(--space-4);
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  /* Register right panel — less padding */
+  .auth-panel-right-reg {
+    padding: 3rem var(--space-3) var(--space-4);
+  }
+
+  .auth-form-wrapper {
+    max-width: 100%;
+    padding-bottom: var(--space-3);
+  }
+
+  /* Header tighter */
+  .auth-form-header {
+    margin-bottom: var(--space-2);
+  }
+  .auth-form-header h2 {
+    font-size: 1.35rem;
+    margin-bottom: 2px;
+  }
+  .auth-form-header p {
+    font-size: var(--text-xs);
+  }
+
+  /* Social button compact */
+  .social-login-single .btn-social {
+    padding: 0.6rem var(--space-3);
+    font-size: var(--text-xs);
+  }
+  .social-login {
+    margin-bottom: var(--space-2);
+  }
+  .social-divider {
+    margin: 0 0 var(--space-2);
+  }
+
+  /* Form fields — smaller gap and padding */
+  .auth-form {
+    gap: 0.55rem;
+  }
+  .form-group {
+    gap: 3px;
+  }
+  .form-label {
+    font-size: 10px;
+  }
+  .form-input {
+    padding: 0.5rem var(--space-3);
+    font-size: var(--text-xs);
+  }
+
+  /* Smaller password requirements panel */
+  .pass-requirements {
+    grid-template-columns: 1fr 1fr;
+    gap: 3px var(--space-1);
+  }
+  .pass-requirements.req-visible {
+    padding: var(--space-1) var(--space-2);
+    max-height: 80px;
+  }
+  .req-item { font-size: 10px; gap: 4px; }
+  .req-icon svg { width: 10px; height: 10px; }
+
+  /* Submit button */
+  .btn-submit {
+    padding: 0.65rem var(--space-4);
+    font-size: var(--text-xs);
+    margin-top: 2px;
+  }
+
+  /* Trust signal */
+  .trust-signal {
+    margin-top: 2px;
+    font-size: 9px;
+  }
+
+  /* Footer */
+  .auth-form-footer {
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+  }
+  .auth-form-footer p {
+    font-size: 11px;
+  }
+
+  /* Strength bars */
+  .strength-bar-container {
+    margin-top: var(--space-1);
+  }
+
+  /* Theme toggle position */
+  .theme-toggle {
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* brand illustration */
   .brand-illustration {
     flex-direction: column;
   }
