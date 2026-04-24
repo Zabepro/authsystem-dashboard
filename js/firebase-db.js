@@ -100,49 +100,61 @@ const FB = {
 
     /* Google Sign-In (popup) — works for both login and register */
     async loginWithGoogle() {
+      let authSucceeded = false;
       try {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope('profile');
         provider.addScope('email');
 
-        const cred = await FAUTH.signInWithPopup(provider);
+        const cred   = await FAUTH.signInWithPopup(provider);
+        authSucceeded = true; /* Auth is done — always redirect after this */
+
         const fbUser = cred.user;
         const uid    = fbUser.uid;
 
-        /* Check if user doc already exists */
-        const snap = await FDB.collection('users').doc(uid).get();
+        /* Firestore sync — errors here must NOT block login */
+        try {
+          const snap = await FDB.collection('users').doc(uid).get();
 
-        if (snap.exists) {
-          /* Update photo + lastLogin if user already registered */
-          await FDB.collection('users').doc(uid).update({
-            lastLogin:  new Date().toISOString(),
-            loginCount: firebase.firestore.FieldValue.increment(1),
-            avatarUrl:  fbUser.photoURL || snap.data().avatarUrl || '',
-            fullName:   fbUser.displayName || snap.data().fullName,
-          });
-          await FB.Activity.log(uid, 'login', 'Umeingia kwa Google');
-        } else {
-          /* New user — create Firestore doc */
-          const userData = {
-            id:         uid,
-            fullName:   fbUser.displayName || fbUser.email.split('@')[0],
-            email:      fbUser.email.toLowerCase(),
-            role:       'user',
-            createdAt:  new Date().toISOString(),
-            lastLogin:  new Date().toISOString(),
-            loginCount: 1,
-            isActive:   true,
-            avatarUrl:  fbUser.photoURL || '',
-            settings:   { theme: 'light', language: 'en', notifications: true },
-          };
-          await FDB.collection('users').doc(uid).set(userData);
-          await FB.Activity.log(uid, 'register', 'Akaunti mpya imeundwa kwa Google');
+          if (snap.exists) {
+            await FDB.collection('users').doc(uid).update({
+              lastLogin:  new Date().toISOString(),
+              loginCount: firebase.firestore.FieldValue.increment(1),
+              avatarUrl:  fbUser.photoURL || snap.data().avatarUrl || '',
+              fullName:   fbUser.displayName || snap.data().fullName,
+            });
+            await FB.Activity.log(uid, 'login', 'Umeingia kwa Google');
+          } else {
+            const userData = {
+              id:         uid,
+              fullName:   fbUser.displayName || fbUser.email.split('@')[0],
+              email:      fbUser.email.toLowerCase(),
+              role:       'user',
+              createdAt:  fbUser.metadata.creationTime || new Date().toISOString(),
+              lastLogin:  new Date().toISOString(),
+              loginCount: 1,
+              isActive:   true,
+              avatarUrl:  fbUser.photoURL || '',
+              settings:   { theme: 'light', language: 'en', notifications: true },
+            };
+            await FDB.collection('users').doc(uid).set(userData);
+            await FB.Activity.log(uid, 'register', 'Akaunti mpya imeundwa kwa Google');
+          }
+        } catch (fsErr) {
+          /* Firestore failed — log warning but Auth succeeded, allow login */
+          console.warn('Google login Firestore sync failed:', fsErr.message);
         }
 
         return { success: true };
+
       } catch (err) {
-        if (err.code === 'auth/popup-closed-by-user') {
-          return { success: false, message: null }; /* silent — user closed popup */
+        if (authSucceeded) {
+          /* Auth succeeded but something else failed — allow through */
+          return { success: true };
+        }
+        if (err.code === 'auth/popup-closed-by-user' ||
+            err.code === 'auth/cancelled-popup-request') {
+          return { success: false, message: null }; /* silent */
         }
         return { success: false, message: FB._authError(err.code) };
       }
