@@ -51,16 +51,34 @@ const FB = {
 
         const cred = await FAUTH.signInWithEmailAndPassword(email.toLowerCase().trim(), password);
         const uid  = cred.user.uid;
+        const fbUser = cred.user;
 
-        const snap = await FDB.collection('users').doc(uid).get();
+        let snap = await FDB.collection('users').doc(uid).get();
+
+        /* Fallback: Firestore doc missing (Auth succeeded but Firestore write failed
+           during registration). Auto-create from Firebase Auth data. */
         if (!snap.exists) {
-          await FAUTH.signOut();
-          return { success: false, message: 'Akaunti haipatikani kwenye mfumo.' };
+          const fallbackData = {
+            id:         uid,
+            fullName:   fbUser.displayName || fbUser.email.split('@')[0],
+            email:      fbUser.email.toLowerCase(),
+            role:       'user',
+            createdAt:  fbUser.metadata.creationTime || new Date().toISOString(),
+            lastLogin:  new Date().toISOString(),
+            loginCount: 1,
+            isActive:   true,
+            avatarUrl:  fbUser.photoURL || '',
+            settings:   { theme: 'light', language: 'en', notifications: true },
+          };
+          await FDB.collection('users').doc(uid).set(fallbackData);
+          await FB.Activity.log(uid, 'login', 'Umeingia mfumoni');
+          return { success: true, user: fallbackData };
         }
 
         const userData = snap.data();
 
-        if (!userData.isActive) {
+        /* Explicit false check — undefined/null isActive means account IS active */
+        if (userData.isActive === false) {
           await FAUTH.signOut();
           return { success: false, message: 'Akaunti yako imezimwa. Wasiliana na msaada.' };
         }
